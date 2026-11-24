@@ -127,7 +127,13 @@ export function CategoryDonutChart() {
       </div>
 
       <div className="donut-footer-callout">
-        <div className="dfc-icon">💡</div>
+        <div className="dfc-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" />
+            <path d="M9 18h6" />
+            <path d="M10 22h4" />
+          </svg>
+        </div>
         <div>
           <strong>Populasi Berisiko: 47,24%</strong>
           <p>
@@ -592,7 +598,16 @@ export function ModelBenchmarkSection() {
       {/* KPI Cards for ML Evaluation */}
       <div className="ml-kpi-grid">
         <article className="ml-kpi-card highlight">
-          <div className="mlk-icon teal">🏆</div>
+          <div className="mlk-icon teal">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+              <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+              <path d="M4 22h16" />
+              <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+              <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+              <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+            </svg>
+          </div>
           <div className="mlk-info">
             <span className="mlk-label">MODEL TERBAIK (4 KELAS)</span>
             <strong className="mlk-val">Random Forest</strong>
@@ -601,7 +616,13 @@ export function ModelBenchmarkSection() {
         </article>
 
         <article className="ml-kpi-card">
-          <div className="mlk-icon blue">📊</div>
+          <div className="mlk-icon blue">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" x2="18" y1="20" y2="10" />
+              <line x1="12" x2="12" y1="20" y2="4" />
+              <line x1="6" x2="6" y1="20" y2="14" />
+            </svg>
+          </div>
           <div className="mlk-info">
             <span className="mlk-label">MACRO F1 (METRIK UTAMA)</span>
             <strong className="mlk-val">36,68%</strong>
@@ -610,7 +631,15 @@ export function ModelBenchmarkSection() {
         </article>
 
         <article className="ml-kpi-card">
-          <div className="mlk-icon violet">⚖️</div>
+          <div className="mlk-icon violet">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
+              <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
+              <path d="M7 21h10" />
+              <path d="M12 3v18" />
+              <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2" />
+            </svg>
+          </div>
           <div className="mlk-info">
             <span className="mlk-label">BALANCED ACCURACY</span>
             <strong className="mlk-val">39,31%</strong>
@@ -619,7 +648,13 @@ export function ModelBenchmarkSection() {
         </article>
 
         <article className="ml-kpi-card">
-          <div className="mlk-icon orange">🎯</div>
+          <div className="mlk-icon orange">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <circle cx="12" cy="12" r="6" />
+              <circle cx="12" cy="12" r="2" />
+            </svg>
+          </div>
           <div className="mlk-info">
             <span className="mlk-label">RECALL HIPERTENSI TERUKUR</span>
             <strong className="mlk-val">52,00%</strong>
@@ -1004,7 +1039,16 @@ export function DataAuditSection() {
           <code className="hash-code">{RESEARCH_META.datasetHash}</code>
         </div>
         <button className="copy-hash-btn" onClick={copyHash}>
-          {copied ? "Tersalin! ✓" : "Salin Hash"}
+          {copied ? (
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+              Tersalin!
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </span>
+          ) : (
+            "Salin Hash"
+          )}
         </button>
       </div>
 

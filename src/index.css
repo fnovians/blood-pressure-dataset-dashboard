@@ -2113,12 +2113,15 @@ footer small {
   margin-top: 4px;
 }
 .sim-preset-chip {
-  padding: 3px 8px;
-  border-radius: 5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border-radius: 6px;
   background: #f1f5f9;
   border: 1px solid #e2e8f0;
   color: #475569;
-  font-size: 8px;
+  font-size: 8.5px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -2126,6 +2129,29 @@ footer small {
 .sim-preset-chip:hover {
   background: #e2e8f0;
   color: #0f172a;
+}
+.preset-indicator-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.preset-indicator-dot.dot-emerald {
+  background: #10b981;
+  box-shadow: 0 0 5px rgba(16, 185, 129, 0.6);
+}
+.preset-indicator-dot.dot-sky {
+  background: #0ea5e9;
+  box-shadow: 0 0 5px rgba(14, 165, 233, 0.6);
+}
+.preset-indicator-dot.dot-amber {
+  background: #f59e0b;
+  box-shadow: 0 0 5px rgba(245, 158, 11, 0.6);
+}
+.preset-indicator-dot.dot-rose {
+  background: #ef4444;
+  box-shadow: 0 0 5px rgba(239, 68, 68, 0.6);
 }
 .sim-results {
   display: flex;
@@ -2497,8 +2523,15 @@ tr.table-row-active td {
   border-radius: 0 10px 10px 0;
 }
 .dfc-icon {
-  font-size: 20px;
-  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: #fef3c7;
+  color: #d97706;
+  flex-shrink: 0;
 }
 .donut-footer-callout strong {
   display: block;
@@ -3060,8 +3093,29 @@ tr.table-row-active td {
   background: linear-gradient(135deg, #ffffff 0%, #f0fdfa 100%);
 }
 .mlk-icon {
-  font-size: 26px;
-  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+.mlk-icon.teal {
+  background: #ccfbf1;
+  color: #0f766e;
+}
+.mlk-icon.blue {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+.mlk-icon.violet {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+.mlk-icon.orange {
+  background: #ffedd5;
+  color: #c2410c;
 }
 .mlk-info {
   display: flex;

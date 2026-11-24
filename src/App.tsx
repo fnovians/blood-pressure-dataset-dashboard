@@ -580,7 +580,7 @@ function LineChart({
                     fontSize="9.5"
                     fontWeight="800"
                   >
-                    ⚡ Crossover Usia 70
+                    Crossover Usia 70
                   </text>
                 </g>
               );
@@ -658,8 +658,13 @@ function LineChart({
             </div>
           )}
           {currentAge >= 70 && metric === "systolic" && (
-            <div style={{ marginTop: "8px", paddingTop: "6px", borderTop: "1px dashed rgba(255,255,255,0.2)", fontSize: "11px", color: "#fef08a" }}>
-              ⚡ Titik Balik (Crossover Point): Sistolik perempuan ({formatNumber(currentFemale ?? 0, 1)}) menyalip laki-laki ({formatNumber(currentMale ?? 0, 1)})
+            <div style={{ marginTop: "8px", paddingTop: "6px", borderTop: "1px dashed rgba(255,255,255,0.2)", fontSize: "11px", color: "#fef08a", display: "flex", alignItems: "center", gap: "6px" }}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+              </svg>
+              <span>
+                Titik Balik (Crossover Point): Sistolik perempuan ({formatNumber(currentFemale ?? 0, 1)}) menyalip laki-laki ({formatNumber(currentMale ?? 0, 1)})
+              </span>
             </div>
           )}
         </div>
@@ -970,31 +975,36 @@ function BloodPressureSimulator({ rows }: { rows: DataRow[] }) {
                   className="sim-preset-chip"
                   onClick={() => setPreset(115, 75)}
                 >
-                  🟢 Normal (115/75)
+                  <span className="preset-indicator-dot dot-emerald" />
+                  <span>Normal (115/75)</span>
                 </button>
                 <button
                   type="button"
                   className="sim-preset-chip"
                   onClick={() => setPreset(125, 78)}
                 >
-                  🟡 Prehipertensi (125/78)
+                  <span className="preset-indicator-dot dot-sky" />
+                  <span>Prehipertensi (125/78)</span>
                 </button>
                 <button
                   type="button"
                   className="sim-preset-chip"
                   onClick={() => setPreset(136, 86)}
                 >
-                  🟠 Stage 1 (136/86)
+                  <span className="preset-indicator-dot dot-amber" />
+                  <span>Stage 1 (136/86)</span>
                 </button>
                 <button
                   type="button"
                   className="sim-preset-chip"
                   onClick={() => setPreset(152, 95)}
                 >
-                  🔴 Stage 2 (152/95)
+                  <span className="preset-indicator-dot dot-rose" />
+                  <span>Stage 2 (152/95)</span>
                 </button>
                 <button type="button" className="sim-preset-chip" onClick={setPopAverage}>
-                  📊 Sesuai Rata-rata Populasi
+                  <Icon name="chart" size={13} />
+                  <span>Sesuai Rata-rata Populasi</span>
                 </button>
               </div>
             </div>
