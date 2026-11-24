@@ -1,0 +1,14 @@
+{
+  "title": "BIGDATA INSIGHT — Blood Pressure Dataset Dashboard",
+  "description": "Analyze blood pressure patterns by age and sex with interactive charts, dataset summaries, and data previews for Big Data students and researchers.",
+  "icons": {
+    "icon": "/favicon.svg"
+  },
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
