@@ -417,7 +417,7 @@ export function MLRiskPredictor() {
                 <div className="mlp-field-label">
                   <span>Gula Darah Puasa / BLDS (Top #4 SHAP)</span>
                   <span className="mlp-value-pill">
-                    {inputs.blds} mg/dL {inputs.blds >= 126 ? "⚠️ Diabetes" : inputs.blds >= 100 ? "Prediabetes" : "Normal"}
+                    {inputs.blds} mg/dL {inputs.blds >= 126 ? "Diabetes (Tinggi)" : inputs.blds >= 100 ? "Prediabetes" : "Normal"}
                   </span>
                 </div>
                 <input
