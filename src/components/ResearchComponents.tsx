@@ -92,7 +92,7 @@ export function CategoryDonutChart() {
         <div className="donut-legend-col">
           <div className="donut-legend-header">
             <strong>Kategori Klinis (AHA / JNC-8)</strong>
-            <span>991.346 Pasien</span>
+            <span>{formatNumber(RESEARCH_META.totalRecords)} Pasien Bersih</span>
           </div>
           <div className="donut-legend-list">
             {BP_CATEGORIES.map((item) => {
@@ -625,7 +625,7 @@ export function ModelBenchmarkSection() {
           </div>
           <div className="mlk-info">
             <span className="mlk-label">MACRO F1 (METRIK UTAMA)</span>
-            <strong className="mlk-val">36,68%</strong>
+            <strong className="mlk-val">36,57%</strong>
             <span className="mlk-desc">Unggul 2,6x lipat dari Dummy (14,12%)</span>
           </div>
         </article>
@@ -642,8 +642,8 @@ export function ModelBenchmarkSection() {
           </div>
           <div className="mlk-info">
             <span className="mlk-label">BALANCED ACCURACY</span>
-            <strong className="mlk-val">39,31%</strong>
-            <span className="mlk-desc">Test Set = 198.270 rekam medis</span>
+            <strong className="mlk-val">39,25%</strong>
+            <span className="mlk-desc">Test Set = {formatNumber(RESEARCH_META.testRecords)} rekam medis</span>
           </div>
         </article>
 
@@ -657,8 +657,8 @@ export function ModelBenchmarkSection() {
           </div>
           <div className="mlk-info">
             <span className="mlk-label">RECALL HIPERTENSI TERUKUR</span>
-            <strong className="mlk-val">52,00%</strong>
-            <span className="mlk-desc">13.248 dari 25.439 kasus terdeteksi</span>
+            <strong className="mlk-val">52,15%</strong>
+            <span className="mlk-desc">13.267 dari 25.438 kasus terdeteksi</span>
           </div>
         </article>
       </div>
@@ -668,7 +668,7 @@ export function ModelBenchmarkSection() {
         <div className="ml-block-header">
           <div>
             <span className="ml-block-eyebrow">2.2 MODEL BENCHMARK</span>
-            <h2>Perbandingan Performa Model Klasifikasi (Test Set n = 198.270)</h2>
+            <h2>Perbandingan Performa Model Klasifikasi (Test Set n = {formatNumber(RESEARCH_META.testRecords)})</h2>
             <p>
               Evaluasi komparatif antara ensemble (Random Forest, XGBoost), linear model (Logistic Regression), dan baseline majority rule pada dataset uji 20% independen (seed=42).
             </p>
@@ -731,7 +731,7 @@ export function ModelBenchmarkSection() {
             <span className="ml-block-eyebrow">DETIL KLASIFIKASI</span>
             <h2>Confusion Matrix & Metrik Per Kelas — Random Forest</h2>
             <p>
-              Distribusi prediksi model terbaik pada 198.270 data uji rekam medis riil.
+              Distribusi prediksi model terbaik pada {formatNumber(RESEARCH_META.testRecords)} data uji rekam medis riil (QWK: {RESEARCH_META.qwk.toFixed(4)}, Adjacent Error: {RESEARCH_META.adjacentErrorPct}%).
             </p>
           </div>
         </div>
@@ -808,7 +808,7 @@ export function ModelBenchmarkSection() {
             <span className="ml-block-eyebrow">2.3 UJI ABLASI & PAIRED BOOTSTRAP</span>
             <h2>Signifikansi Gaya Hidup: Merokok & Konsumsi Alkohol</h2>
             <p>
-              Hasil uji hipotesis non-parametrik Paired Bootstrap dengan <strong>5.000 iterasi resampling</strong> pada 198.270 data uji.
+              Hasil uji hipotesis non-parametrik Paired Bootstrap dengan <strong>{formatNumber(BOOTSTRAP_ABLATION.iterations)} iterasi resampling</strong> pada {formatNumber(BOOTSTRAP_ABLATION.testSamples)} data uji.
             </p>
           </div>
           <span className="decision-badge">{BOOTSTRAP_ABLATION.decision}</span>
@@ -839,14 +839,14 @@ export function ModelBenchmarkSection() {
 
         <div className="bootstrap-ci-box">
           <div className="ci-visual">
-            <span className="ci-tag">95% Confidence Interval</span>
+            <span className="ci-tag">95% Confidence Interval (Paired Bootstrap)</span>
             <div className="ci-line-track">
               <div className="ci-line-fill" />
-              <div className="ci-marker left">0,0003</div>
-              <div className="ci-marker center">Δ = +0,0017</div>
-              <div className="ci-marker right">0,0031</div>
+              <div className="ci-marker left">-0,0015</div>
+              <div className="ci-marker center">Δ = +0,0000</div>
+              <div className="ci-marker right">+0,0014</div>
             </div>
-            <small>Interval sepenuhnya berada di atas 0 (p = 0,0108 &lt; 0,05) — H1 Didukung!</small>
+            <small>Interval memuat nilai 0 (p = {BOOTSTRAP_ABLATION.pValue.toFixed(4)} &gt; 0,05) — H0 Tidak Tertolak (Selisih Tidak Signifikan)</small>
           </div>
           <div className="ci-desc">
             <p>{BOOTSTRAP_ABLATION.explanation}</p>

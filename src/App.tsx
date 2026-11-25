@@ -8,6 +8,7 @@ import {
   DataAuditSection,
   AuthorsTeamCard,
 } from "./components/ResearchComponents";
+import { MLRiskPredictor } from "./components/MLRiskPredictor";
 import { LiquidGlassBackground } from "./components/LiquidGlassBackground";
 import { RESEARCH_META } from "./data/researchData";
 
@@ -24,6 +25,7 @@ type IconName =
   | "chevron"
   | "file"
   | "activity"
+  | "sparkles"
   | "layers"
   | "calendar"
   | "arrow"
@@ -74,6 +76,7 @@ type SortDirection = "asc" | "desc";
 
 const navItems: { label: string; icon: IconName }[] = [
   { label: "Overview", icon: "grid" },
+  { label: "ML Risk Predictor", icon: "sparkles" },
   { label: "Dataset Summary", icon: "database" },
   { label: "Demographic Analysis", icon: "users" },
   { label: "Blood Pressure Analysis", icon: "heart" },
@@ -87,6 +90,11 @@ const pageMeta: Record<string, { kicker: string; title: string; description: str
     kicker: "ANALYTICS OVERVIEW",
     title: "Dashboard Overview",
     description: "Ringkasan utama populasi, kategori klinis, dan indikator tekanan darah.",
+  },
+  "ML Risk Predictor": {
+    kicker: "PREDICTIVE SCREENING & XAI",
+    title: "Kalkulator Prediksi Risiko Tekanan Darah",
+    description: "Simulasikan skrining risiko kategori tekanan darah pasien baru berbasis 22 fitur laboratorium, gaya hidup, dan antropometri tanpa input tensi.",
   },
   "Dataset Summary": {
     kicker: "DATASET AUDIT & SUMMARY",
@@ -210,6 +218,11 @@ function Icon({
     activity: (
       <>
         <path d="M3 12h4l2-6 4 12 2-6h6" />
+      </>
+    ),
+    sparkles: (
+      <>
+        <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3Z" />
       </>
     ),
     layers: (
@@ -1993,7 +2006,12 @@ export default function App() {
               </section>
             )}
 
-            {/* Interactive Blood Pressure Simulator & Risk Comparator (WOW Widget) */}
+            {/* 1. ML Risk Predictor (Interactive Clinical AI Screening) */}
+            {(activeNav === "Overview" || activeNav === "ML Risk Predictor") && (
+              <MLRiskPredictor />
+            )}
+
+            {/* 2. Interactive Blood Pressure Simulator (Manual SBP/DBP Comparator) */}
             {(activeNav === "Overview" || activeNav === "Blood Pressure Analysis") && (
               <BloodPressureSimulator rows={rows} />
             )}
@@ -2007,9 +2025,6 @@ export default function App() {
                 />
                 <BiomarkerComparisonChart />
               </section>
-            )}
-            {(activeNav === "Overview" || activeNav === "Blood Pressure Analysis") && (
-              <BloodPressureSimulator rows={rows} />
             )}
 
             {activeNav === "Data Distribution" && (
@@ -2099,9 +2114,10 @@ export default function App() {
                 <SectionHeader
                   eyebrow="PAKET 2 — EVALUASI MODEL & EXPLAINABLE ML"
                   title="Rekapitulasi Hasil Evaluasi Model & Interpretabilitas SHAP"
-                  description="Benchmark model klasifikasi 4-kelas pada 198.270 data uji (split 80:20), Confusion Matrix, Uji Ablasi 5.000 Paired Bootstrap, Evaluasi Subkelompok, dan Peringkat Top 20 Fitur SHAP."
+                  description="Benchmark model klasifikasi 4-kelas pada 198.264 data uji (split 80:20), Confusion Matrix, Uji Ablasi 5.000 Paired Bootstrap, Evaluasi Subkelompok, dan Peringkat Top 20 Fitur SHAP."
                 />
                 <ModelBenchmarkSection />
+                <MLRiskPredictor />
               </section>
             )}
 
@@ -2110,13 +2126,13 @@ export default function App() {
                 <SectionHeader
                   eyebrow="2.1 AUDIT DATASET & PREPROCESSING"
                   title="Audit Integritas Data, Nilai Sentinel & Skema Split"
-                  description="Spesifikasi teknis dataset (991.346 baris × 24 kolom), verifikasi hash SHA-256, penanganan nilai sentinel tanpa kebocoran data (data leakage), dan pembagian 80:20 stratified split."
+                  description="Spesifikasi teknis dataset (991.346 baris mentah, 991.320 bersih setelah hapus 26 duplikat), verifikasi hash SHA-256, penanganan nilai sentinel tanpa kebocoran data (data leakage), dan pembagian 80:20 stratified split."
                 />
                 <DataAuditSection />
               </section>
             )}
 
-            {activeNav !== "About Dataset" && activeNav !== "Model Evaluation & SHAP" && (
+            {activeNav !== "About Dataset" && activeNav !== "Model Evaluation & SHAP" && activeNav !== "ML Risk Predictor" && (
               <section className="dashboard-section table-section" id="dataset-summary-table">
                 <SectionHeader
                   eyebrow="DATASET TABLE & SUMMARY"
