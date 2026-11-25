@@ -115,7 +115,7 @@ export function AnimatedHeaderWave() {
         <span className="telemetry-radar-dot" />
         <div className="telemetry-labels">
           <span className="telemetry-title">HEMODYNAMIC WAVEFORM</span>
-          <span className="telemetry-subtitle">991.346 Pasien · Fluktuasi Dinamis</span>
+          <span className="telemetry-subtitle">991.320 Pasien Bersih · Fluktuasi Dinamis</span>
         </div>
       </div>
     </div>

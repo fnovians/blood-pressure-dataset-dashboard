@@ -13,6 +13,8 @@ export interface ResearchMeta {
   academicYear: string;
   authors: AuthorInfo[];
   datasetHash: string;
+  totalRecordsRaw: number;
+  duplicatesRemoved: number;
   totalRecords: number;
   totalFeatures: number;
   trainRecords: number;
@@ -22,6 +24,10 @@ export interface ResearchMeta {
   sentinelTotal: number;
   sentinelRows: number;
   sentinelPct: number;
+  qwk: number;
+  adjacentErrors: number;
+  totalErrors: number;
+  adjacentErrorPct: number;
 }
 
 export const RESEARCH_META: ResearchMeta = {
@@ -34,18 +40,24 @@ export const RESEARCH_META: ResearchMeta = {
   authors: [
     { name: "Farid Ade Novian", nim: "25051204327", role: "Model Architecture & Visual Analytics" },
     { name: "Farid Hanif Fathan", nim: "25051204364", role: "Data Pipeline & Feature Engineering" },
-    { name: "Kevin Dzaky Hendrawan", nim: "25051204293", role: "Statistical Validation & SHAP Explainability" },
+    { name: "Kevin Dzaky Hendratama", nim: "25051204293", role: "Statistical Validation & SHAP Explainability" },
   ],
   datasetHash: "0a90c42e343e720fe119eb77b6c1ae2b9bfdcba9f5a1227f18f1e6ce59358e38",
-  totalRecords: 991346,
-  totalFeatures: 24,
-  trainRecords: 793076,
-  testRecords: 198270,
+  totalRecordsRaw: 991346,
+  duplicatesRemoved: 26,
+  totalRecords: 991320,
+  totalFeatures: 22,
+  trainRecords: 793056,
+  testRecords: 198264,
   splitRatio: "80:20 Stratified",
   splitSeed: 42,
   sentinelTotal: 7125,
   sentinelRows: 6620,
   sentinelPct: 0.668,
+  qwk: 0.3761,
+  adjacentErrors: 55304,
+  totalErrors: 111381,
+  adjacentErrorPct: 49.65,
 };
 
 export interface SentinelBreakdown {
@@ -81,7 +93,7 @@ export const BP_CATEGORIES: BPCategory[] = [
     key: "normal",
     name: "Normal",
     criteria: "SBP < 120 dan DBP < 80 mmHg",
-    count: 390076,
+    count: 390072,
     percent: 39.35,
     color: "#10b981", // emerald
     bgLight: "#ecfdf5",
@@ -91,7 +103,7 @@ export const BP_CATEGORIES: BPCategory[] = [
     key: "prahipertensi",
     name: "Prahipertensi",
     criteria: "SBP 130–139 atau DBP 80–89 mmHg",
-    count: 341157,
+    count: 341146,
     percent: 34.41,
     color: "#f59e0b", // amber
     bgLight: "#fffbeb",
@@ -101,7 +113,7 @@ export const BP_CATEGORIES: BPCategory[] = [
     key: "meningkat",
     name: "Tekanan Darah Meningkat",
     criteria: "SBP 120–129 dan DBP < 80 mmHg",
-    count: 132917,
+    count: 132910,
     percent: 13.41,
     color: "#0ea5e9", // sky
     bgLight: "#f0f9ff",
@@ -111,7 +123,7 @@ export const BP_CATEGORIES: BPCategory[] = [
     key: "hipertensi",
     name: "Hipertensi Terukur",
     criteria: "SBP ≥ 140 atau DBP ≥ 90 mmHg",
-    count: 127196,
+    count: 127192,
     percent: 12.83,
     color: "#ef4444", // rose
     bgLight: "#fef2f2",
@@ -257,39 +269,39 @@ export interface ModelBenchmark {
 export const MODEL_BENCHMARKS: ModelBenchmark[] = [
   {
     model: "Random Forest (Semua Fitur)",
-    accuracy: 43.89,
-    balancedAcc: 39.31,
-    macroF1: 36.68,
-    note: "Model utama terbaik (skema 4 kelas) dengan class_weight balanced_subsample",
+    accuracy: 43.82,
+    balancedAcc: 39.25,
+    macroF1: 36.57,
+    note: "Model utama terbaik (skema 4 kelas) dengan class_weight balanced_subsample. QWK: 0,3761",
     isBest: true,
   },
   {
     model: "RF tanpa Merokok & Alkohol",
-    accuracy: 43.77,
-    balancedAcc: 39.14,
-    macroF1: 36.51,
-    note: "Uji ablasi dengan konfigurasi identik untuk menguji signifikansi gaya hidup",
+    accuracy: 43.86,
+    balancedAcc: 39.19,
+    macroF1: 36.57,
+    note: "Uji ablasi dengan konfigurasi identik; selisih macro F1 = 0,0000 (tidak berbeda secara signifikan)",
     isAblation: true,
   },
   {
     model: "Logistic Regression (balanced)",
-    accuracy: 41.15,
-    balancedAcc: 39.13,
-    macroF1: 35.39,
+    accuracy: 41.11,
+    balancedAcc: 39.12,
+    macroF1: 35.42,
     note: "Model linear multikelas dengan penyeimbangan bobot kelas",
   },
   {
     model: "XGBoost (tanpa pembobotan)",
-    accuracy: 49.47,
-    balancedAcc: 34.54,
-    macroF1: 31.17,
+    accuracy: 49.55,
+    balancedAcc: 34.60,
+    macroF1: 31.19,
     note: "Akurasi semu tinggi namun gagal total pada minoritas (recall meningkat = 0,00)",
   },
   {
     model: "Logistic Regression (tanpa bobot)",
-    accuracy: 48.90,
-    balancedAcc: 33.93,
-    macroF1: 30.48,
+    accuracy: 48.95,
+    balancedAcc: 34.00,
+    macroF1: 30.57,
     note: "Bias ekstrem ke kelas mayoritas (recall meningkat = 0,00)",
   },
   {
@@ -301,9 +313,9 @@ export const MODEL_BENCHMARKS: ModelBenchmark[] = [
   },
   {
     model: "Uji Sensitivitas RF (3 Kelas)",
-    accuracy: 51.99,
-    balancedAcc: 49.71,
-    macroF1: 47.29,
+    accuracy: 52.01,
+    balancedAcc: 49.77,
+    macroF1: 47.34,
     note: "Kelas 'Tekanan darah meningkat' dilebur ke Normal untuk menguji batas separabilitas",
   },
 ];
@@ -325,35 +337,35 @@ export interface ConfusionMatrixRow {
 export const RF_CONFUSION_MATRIX: ConfusionMatrixRow[] = [
   {
     actualClass: "Normal",
-    support: 78016,
+    support: 78015,
     precision: 0.60,
     recall: 0.59,
     f1: 0.60,
-    preds: { normal: 46227, meningkat: 5148, prahipertensi: 17223, hipertensi: 9418 },
+    preds: { normal: 46211, meningkat: 4959, prahipertensi: 17266, hipertensi: 9579 },
   },
   {
     actualClass: "Tekanan darah meningkat",
-    support: 26583,
+    support: 26582,
     precision: 0.18,
     recall: 0.09,
     f1: 0.12,
-    preds: { normal: 9538, meningkat: 2409, prahipertensi: 7939, hipertensi: 6697 },
+    preds: { normal: 9424, meningkat: 2363, prahipertensi: 7948, hipertensi: 6847 },
   },
   {
     actualClass: "Prahipertensi",
-    support: 68232,
+    support: 68229,
     precision: 0.43,
     recall: 0.37,
     f1: 0.40,
-    preds: { normal: 17821, meningkat: 4587, prahipertensi: 25145, hipertensi: 20679 },
+    preds: { normal: 17752, meningkat: 4613, prahipertensi: 25042, hipertensi: 20822 },
   },
   {
     actualClass: "Hipertensi terukur",
-    support: 25439,
+    support: 25438,
     precision: 0.26,
     recall: 0.52,
     f1: 0.35,
-    preds: { normal: 3153, meningkat: 1437, prahipertensi: 7601, hipertensi: 13248 },
+    preds: { normal: 3161, meningkat: 1472, prahipertensi: 7538, hipertensi: 13267 },
   },
 ];
 
@@ -375,16 +387,16 @@ export const BOOTSTRAP_ABLATION: {
   explanation: string;
 } = {
   iterations: 5000,
-  testSamples: 198270,
-  ci95: [0.0003, 0.0031],
-  pValue: 0.0108,
-  decision: "H1 didukung secara statistik (p = 0.0108 < 0.05)",
+  testSamples: 198264,
+  ci95: [-0.0015, 0.0014],
+  pValue: 0.5002,
+  decision: "H0 tidak tertolak (p = 0.5002 > 0.05, selisih tidak terbukti secara statistik)",
   explanation:
-    "Karena 95% Confidence Interval [+0,0003, +0,0031] tidak memuat nol dan p(Δ ≤ 0) = 0,0108, penambahan kebiasaan merokok (SMK_stat_type_cd) dan alkohol (DRK_YN) terbukti meningkatkan performa klasifikasi secara signifikan, meski magnitudonya kecil karena efek fisiologisnya sebagian besar telah dimediasi oleh biomarker metabolik seperti gamma_GTP dan trigliserida.",
+    "Karena 95% Confidence Interval [-0,0015, +0,0014] memuat angka nol dan p(Δ ≤ 0) = 0,5002, penambahan kebiasaan merokok (SMK_stat_type_cd) dan alkohol (DRK_YN) tidak terbukti memberikan peningkatan performa secara signifikan terhadap model Random Forest. Hal ini menegaskan bahwa sinyal risiko dari gaya hidup telah dimediasi sepenuhnya oleh biomarker metabolik seperti gamma_GTP, SGOT_AST, dan profil trigliserida.",
   results: [
-    { metric: "Accuracy", withLifestyle: 43.89, withoutLifestyle: 43.77, delta: 0.0012, deltaFormatted: "+0,12%" },
-    { metric: "Balanced Accuracy", withLifestyle: 39.31, withoutLifestyle: 39.14, delta: 0.0017, deltaFormatted: "+0,17%" },
-    { metric: "Macro F1 (Metrik Utama)", withLifestyle: 36.68, withoutLifestyle: 36.51, delta: 0.0017, deltaFormatted: "+0,17%" },
+    { metric: "Accuracy", withLifestyle: 43.82, withoutLifestyle: 43.86, delta: -0.0004, deltaFormatted: "-0,04%" },
+    { metric: "Balanced Accuracy", withLifestyle: 39.25, withoutLifestyle: 39.19, delta: 0.0006, deltaFormatted: "+0,06%" },
+    { metric: "Macro F1 (Metrik Utama)", withLifestyle: 36.57, withoutLifestyle: 36.57, delta: 0.0000, deltaFormatted: "+0,00%" },
   ],
 };
 
@@ -398,17 +410,17 @@ export interface SubgroupItem {
 }
 
 export const SUBGROUP_RESULTS: SubgroupItem[] = [
-  { subgroup: "Perempuan (Female)", category: "Gender", n: 93250, accuracy: 48.76, balancedAcc: 39.08, macroF1: 34.11 },
-  { subgroup: "Laki-laki (Male)", category: "Gender", n: 105020, accuracy: 39.58, balancedAcc: 35.69, macroF1: 33.64 },
-  { subgroup: "< 40 tahun", category: "Usia", n: 49787, accuracy: 56.24, balancedAcc: 38.96, macroF1: 39.25 },
-  { subgroup: "40–49 tahun", category: "Usia", n: 49734, accuracy: 49.76, balancedAcc: 37.03, macroF1: 35.24 },
-  { subgroup: "50–59 tahun", category: "Usia", n: 47910, accuracy: 40.78, balancedAcc: 34.97, macroF1: 33.35 },
-  { subgroup: "60+ tahun", category: "Usia", n: 50839, accuracy: 29.00, balancedAcc: 31.32, macroF1: 25.67 },
-  { subgroup: "Tidak Pernah Merokok (SMK=1)", category: "Merokok", n: 120558, accuracy: 46.00, balancedAcc: 39.81, macroF1: 36.14 },
-  { subgroup: "Mantan Perokok (SMK=2)", category: "Merokok", n: 34884, accuracy: 39.27, balancedAcc: 35.84, macroF1: 33.61 },
-  { subgroup: "Perokok Aktif (SMK=3)", category: "Merokok", n: 42828, accuracy: 41.74, balancedAcc: 35.91, macroF1: 34.14 },
-  { subgroup: "Tidak Minum Alkohol (DRK=N)", category: "Alkohol", n: 99018, accuracy: 42.99, balancedAcc: 39.13, macroF1: 35.61 },
-  { subgroup: "Minum Alkohol (DRK=Y)", category: "Alkohol", n: 99252, accuracy: 44.80, balancedAcc: 39.00, macroF1: 36.85 },
+  { subgroup: "Perempuan (Female)", category: "Gender", n: 93112, accuracy: 48.62, balancedAcc: 39.14, macroF1: 33.94 },
+  { subgroup: "Laki-laki (Male)", category: "Gender", n: 105152, accuracy: 39.58, balancedAcc: 35.59, macroF1: 33.53 },
+  { subgroup: "< 40 tahun", category: "Usia", n: 49826, accuracy: 56.35, balancedAcc: 38.88, macroF1: 39.12 },
+  { subgroup: "40–49 tahun", category: "Usia", n: 49714, accuracy: 49.94, balancedAcc: 37.13, macroF1: 35.42 },
+  { subgroup: "50–59 tahun", category: "Usia", n: 48051, accuracy: 40.51, balancedAcc: 34.77, macroF1: 33.19 },
+  { subgroup: "60+ tahun", category: "Usia", n: 50673, accuracy: 28.64, balancedAcc: 31.11, macroF1: 25.19 },
+  { subgroup: "Tidak Pernah Merokok (SMK=1)", category: "Merokok", n: 120542, accuracy: 45.99, balancedAcc: 39.92, macroF1: 36.12 },
+  { subgroup: "Mantan Perokok (SMK=2)", category: "Merokok", n: 35022, accuracy: 38.98, balancedAcc: 35.41, macroF1: 33.19 },
+  { subgroup: "Perokok Aktif (SMK=3)", category: "Merokok", n: 42700, accuracy: 41.67, balancedAcc: 35.77, macroF1: 34.03 },
+  { subgroup: "Tidak Minum Alkohol (DRK=N)", category: "Alkohol", n: 99273, accuracy: 42.70, balancedAcc: 39.01, macroF1: 35.37 },
+  { subgroup: "Minum Alkohol (DRK=Y)", category: "Alkohol", n: 98991, accuracy: 44.94, balancedAcc: 38.97, macroF1: 36.80 },
 ];
 
 export interface ShapFeature {
@@ -420,26 +432,26 @@ export interface ShapFeature {
 }
 
 export const TOP20_SHAP: ShapFeature[] = [
-  { rank: 1, feature: "num__age", label: "Usia (Age)", meanShap: 0.02926, category: "Demografi" },
-  { rank: 2, feature: "num__waistline", label: "Lingkar Pinggang (Waistline)", meanShap: 0.02479, category: "Antropometri" },
-  { rank: 3, feature: "num__gamma_GTP", label: "gamma-GTP (Enzim Hati/Metabolik)", meanShap: 0.01828, category: "Biomarker Enzim" },
-  { rank: 4, feature: "num__BLDS", label: "Gula Darah Puasa (BLDS)", meanShap: 0.01680, category: "Metabolik & Darah" },
-  { rank: 5, feature: "num__triglyceride", label: "Trigliserida", meanShap: 0.01411, category: "Profil Lipid" },
-  { rank: 6, feature: "num__weight", label: "Berat Badan (Weight)", meanShap: 0.01319, category: "Antropometri" },
-  { rank: 7, feature: "num__hemoglobin", label: "Hemoglobin", meanShap: 0.00991, category: "Metabolik & Darah" },
-  { rank: 8, feature: "num__height", label: "Tinggi Badan (Height)", meanShap: 0.00608, category: "Antropometri" },
-  { rank: 9, feature: "num__SGOT_AST", label: "SGOT / AST (Enzim Hati)", meanShap: 0.00598, category: "Biomarker Enzim" },
-  { rank: 10, feature: "num__sight_left", label: "Penglihatan Kiri (Sight Left)", meanShap: 0.00423, category: "Pemeriksaan Fisik" },
-  { rank: 11, feature: "cat__sex_Female", label: "Jenis Kelamin (Perempuan)", meanShap: 0.00412, category: "Demografi" },
-  { rank: 12, feature: "cat__sex_Male", label: "Jenis Kelamin (Laki-laki)", meanShap: 0.00394, category: "Demografi" },
-  { rank: 13, feature: "num__tot_chole", label: "Total Kolesterol", meanShap: 0.00370, category: "Profil Lipid" },
-  { rank: 14, feature: "num__sight_right", label: "Penglihatan Kanan (Sight Right)", meanShap: 0.00360, category: "Pemeriksaan Fisik" },
-  { rank: 15, feature: "num__SGOT_ALT", label: "SGOT / ALT (Enzim Hati)", meanShap: 0.00350, category: "Biomarker Enzim" },
-  { rank: 16, feature: "num__HDL_chole", label: "HDL Kolesterol (Kolesterol Baik)", meanShap: 0.00302, category: "Profil Lipid" },
-  { rank: 17, feature: "num__LDL_chole", label: "LDL Kolesterol (Kolesterol Jahat)", meanShap: 0.00227, category: "Profil Lipid" },
-  { rank: 18, feature: "cat__DRK_YN_Y", label: "Konsumsi Alkohol (Ya)", meanShap: 0.00191, category: "Gaya Hidup" },
-  { rank: 19, feature: "cat__DRK_YN_N", label: "Konsumsi Alkohol (Tidak)", meanShap: 0.00183, category: "Gaya Hidup" },
-  { rank: 20, feature: "cat__SMK_stat_type_cd_3", label: "Status Perokok Aktif (SMK=3)", meanShap: 0.00156, category: "Gaya Hidup" },
+  { rank: 1, feature: "num__age", label: "Usia (Age)", meanShap: 0.02994, category: "Demografi" },
+  { rank: 2, feature: "num__waistline", label: "Lingkar Pinggang (Waistline)", meanShap: 0.02447, category: "Antropometri" },
+  { rank: 3, feature: "num__gamma_GTP", label: "gamma-GTP (Enzim Hati/Metabolik)", meanShap: 0.01762, category: "Biomarker Enzim" },
+  { rank: 4, feature: "num__BLDS", label: "Gula Darah Puasa (BLDS)", meanShap: 0.01731, category: "Metabolik & Darah" },
+  { rank: 5, feature: "num__triglyceride", label: "Trigliserida", meanShap: 0.01344, category: "Profil Lipid" },
+  { rank: 6, feature: "num__weight", label: "Berat Badan (Weight)", meanShap: 0.01237, category: "Antropometri" },
+  { rank: 7, feature: "num__hemoglobin", label: "Hemoglobin", meanShap: 0.00998, category: "Metabolik & Darah" },
+  { rank: 8, feature: "num__SGOT_AST", label: "SGOT / AST (Enzim Hati)", meanShap: 0.00599, category: "Biomarker Enzim" },
+  { rank: 9, feature: "num__height", label: "Tinggi Badan (Height)", meanShap: 0.00587, category: "Antropometri" },
+  { rank: 10, feature: "cat__sex_Male", label: "Jenis Kelamin (Laki-laki)", meanShap: 0.00442, category: "Demografi" },
+  { rank: 11, feature: "num__sight_left", label: "Penglihatan Kiri (Sight Left)", meanShap: 0.00410, category: "Pemeriksaan Fisik" },
+  { rank: 12, feature: "cat__sex_Female", label: "Jenis Kelamin (Perempuan)", meanShap: 0.00388, category: "Demografi" },
+  { rank: 13, feature: "num__tot_chole", label: "Total Kolesterol", meanShap: 0.00385, category: "Profil Lipid" },
+  { rank: 14, feature: "num__sight_right", label: "Penglihatan Kanan (Sight Right)", meanShap: 0.00363, category: "Pemeriksaan Fisik" },
+  { rank: 15, feature: "num__SGOT_ALT", label: "SGOT / ALT (Enzim Hati)", meanShap: 0.00339, category: "Biomarker Enzim" },
+  { rank: 16, feature: "num__HDL_chole", label: "HDL Kolesterol (Kolesterol Baik)", meanShap: 0.00311, category: "Profil Lipid" },
+  { rank: 17, feature: "num__LDL_chole", label: "LDL Kolesterol (Kolesterol Jahat)", meanShap: 0.00218, category: "Profil Lipid" },
+  { rank: 18, feature: "cat__DRK_YN_Y", label: "Konsumsi Alkohol (Ya)", meanShap: 0.00180, category: "Gaya Hidup" },
+  { rank: 19, feature: "cat__DRK_YN_N", label: "Konsumsi Alkohol (Tidak)", meanShap: 0.00173, category: "Gaya Hidup" },
+  { rank: 20, feature: "cat__urine_protein_1", label: "Protein Urine Negatif (Tingkat 1)", meanShap: 0.00149, category: "Metabolik & Darah" },
 ];
 
 export interface DiscussionInsight {
@@ -454,16 +466,16 @@ export const DISCUSSION_INSIGHTS: DiscussionInsight[] = [
   {
     title: "Pemilihan Metrik Utama (Macro F1 vs Accuracy)",
     tag: "Metodologi Evaluasi",
-    lead: "Akurasi semu 49,47% pada XGBoost mengabaikan total kelas minoritas.",
+    lead: "Akurasi semu 49,55% pada XGBoost mengabaikan total kelas minoritas.",
     content:
-      "XGBoost dan Logistic Regression tanpa pembobotan menghasilkan Accuracy lebih tinggi (49,47% dan 48,90%), namun mengalami 'class collapse' dengan recall 0,00 pada kelas 'Tekanan darah meningkat'. Random Forest dengan class_weight='balanced_subsample' dipilih sebagai model terbaik karena menghasilkan Macro F1 tertinggi (36,68%) serta berhasil menangkap 52% kasus 'Hipertensi terukur' yang merupakan prioritas klinis pencegahan stroke dan infark miokard.",
+      "XGBoost dan Logistic Regression tanpa pembobotan menghasilkan Accuracy lebih tinggi (49,55% dan 48,95%), namun mengalami 'class collapse' dengan recall 0,00 pada kelas 'Tekanan darah meningkat'. Random Forest dengan class_weight='balanced_subsample' dipilih sebagai model terbaik karena menghasilkan Macro F1 tertinggi (36,57%) serta berhasil menangkap 52% kasus 'Hipertensi terukur' yang merupakan prioritas klinis pencegahan stroke dan infark miokard.",
     clinicalSignificance:
       "Dalam skrining preventif, kegagalan mendeteksi hipertensi membawa risiko mortalitas fatal. Macro F1 memastikan model tidak mengorbankan kelas minoritas demi akurasi semu.",
   },
   {
     title: "Penurunan Akurasi pada Kelompok Lansia (60+)",
     tag: "Confounder Klinis",
-    lead: "Macro F1 anjlok dari 39,25% (<40 tahun) menjadi 25,67% pada lansia.",
+    lead: "Macro F1 anjlok dari 39,12% (<40 tahun) menjadi 25,19% pada lansia.",
     content:
       "Performa model mengalami degradasi tajam pada responden berusia 60 tahun ke atas. Penurunan ini mencerminkan adanya variabel perancu (confounding variable) klinis yang tidak terekam dalam dataset rekam medis publik ini, yaitu konsumsi rutin obat antihipertensi (seperti ACE-inhibitor, ARB, atau CCB). Pasien lanjut usia yang secara patologis hipertensif memiliki profil tekanan darah sistolik/diastolik terukur normal semu akibat efek farmakoterapi.",
     clinicalSignificance:
